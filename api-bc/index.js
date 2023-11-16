@@ -1,8 +1,9 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
 const app = express()
+require('dotenv').config();
 
-mongoose.connect('mongodb+srv://projetoweb2:78CfoEwAHKNmS4DZ@clusterprojeto2.xkprbmx.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGO_URL);
 
 mongoose.connection.on('connected', () => {
   console.log('MongoDB conectado');
