@@ -1,6 +1,7 @@
 export default function UserCreate() {
     return (
         <>
+        <Header />
             <main className="container container-form mt-5 mb-5">
                 <h2 className="text-center mb-3">Cadastro de Usuário</h2>
                 <form action="/users/create" method="POST" enctype="application/x-www-form-urlencoded">

@@ -1,6 +1,7 @@
 export default function UserEdit() {
     return (
         <>
+        <Header />
             <main className="container container-form mt-5 mb-5">
                 <h2 className="text-center mb-1">Editar Usuário</h2>
                 <form action="/users/edit" method="POST" enctype="application/x-www-form-urlencoded">
