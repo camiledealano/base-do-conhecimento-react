@@ -1,5 +1,4 @@
 const express = require('express');
-const { default: mongoose } = require('mongoose');
 const app = express()
 
 
@@ -16,5 +15,7 @@ const routes = require("./src/routes/router");
 
 app.use(express.json());
 app.use("/api", routes);
+
+
 
 app.listen(8080, function () { console.log('Aplicação executando na porta 8080!'); }); 

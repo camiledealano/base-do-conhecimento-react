@@ -1,10 +1,13 @@
+import Header from "@/components/Header"
 import SuccessMessage from "@/components/SuccessMessage"
+import Link from "next/link"
 
 export default function UserList() {
     return (
         <>
+        <Header />
             <main className="mt-4">
-                <SuccessMessage />
+                {/* <SuccessMessage /> */}
 
                 <div className="mb-4" style={{ marginLeft: '6%', width: '150px' }}>
                     <a href="/users/new" className="btn btn-success d-flex align-items-center">
@@ -36,17 +39,17 @@ export default function UserList() {
                                 <td> user.author_level </td>
                                 <td>user.author_status</td>
                                 <td className="btn-group">
-                                    <a href="/users/edit/iddoautor">
+                                    <Link href="/users/edit/iddoautor">
                                         <button className="btn btn-outline-primary btn-sm">
                                             <i className="material-icons">create</i>
                                         </button>
-                                    </a>
+                                    </Link>
                                     <div style={{ margin: '3px' }}></div>
-                                    <a href="/users/delete/iddoautor">
+                                    <Link href="/users/delete/iddoautor">
                                         <button className="btn btn-outline-danger btn-sm">
                                             <i className="material-icons">delete</i>
                                         </button>
-                                    </a>
+                                    </Link>
                                 </td>
                             </tr>
                         </tbody>

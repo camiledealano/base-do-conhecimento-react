@@ -1,6 +1,7 @@
 export default function ArticleEdit() {
     return (
         <>
+        <Header />
             <main className="container container-form mt-4 mb-5">
                 <h2 className="text-center mb-1">Editar Artigo</h2>
                 <form className="row g-3" action="/articles/edit" method="POST" enctype="application/x-www-form-urlencoded">
