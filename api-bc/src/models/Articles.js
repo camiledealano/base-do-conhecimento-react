@@ -7,17 +7,14 @@ const articlesSchema = new Schema({
     title: String,
     body:String,
     keywords: String ,
-    likes:  Number ,
+    likes: { type: Number, default: 0 },
     published: Boolean ,
-    featured:  String ,
+    featured: { type: String, default: "off" },
     author_name: String ,
     published_date: String,
 });
 
-// Criar o modelo com base no schema
+
 const Articles = mongoose.model('Articles', articlesSchema);
 
-module.exports = {
-    Articles,
-    articlesSchema,
-};
+module.exports = Articles;

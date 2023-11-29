@@ -1,15 +1,19 @@
 const UsersModel = require("../models/Users");
+const bcrypt = require('bcryptjs');
+
 
 const usersController = {
 
     create: async(req, res) => {
         try{
-            console.log(req.body)
+           const salt = await bcrypt.genSalt(12);
+           const passwordHash = await bcrypt.hash(req.body.pwd, salt);
+
             const user = {
                 author_name: req.body.name,
                 author_email: req.body.email,
                 author_user: req.body.user,
-                author_pwd: req.body.pwd,
+                author_pwd: passwordHash,
                 author_level: req.body.level,
                 author_status: req.body.status
             };
@@ -17,9 +21,12 @@ const usersController = {
 
             const response = await UsersModel.create(user);
 
+            response.author_pwd = undefined;
+            
             res.status(201).json({response, msg: "Usuário criado com sucesso."});
         } catch(error){
-            console.log(error);
+            res.status(500).json({ msg: error.message });
+            console.log({error: error});        
         }
     },
 
@@ -43,7 +50,8 @@ const usersController = {
 
             res.json(user);
         } catch(error){
-            console.log(error);
+            res.status(500).json({ msg: error.message });
+            console.log({error: error});          
         }
     },
 
@@ -60,7 +68,8 @@ const usersController = {
 
             res.status(201).json({userDeleted, msg: "Usuário deletado com sucesso."});
         } catch(error){
-            console.log(error);
+            res.status(500).json({ msg: error.message });
+            console.log({error: error});        
         }
     },
 
@@ -85,7 +94,8 @@ const usersController = {
 
             res.status(201).json({updatedUser, msg: "Usuário atualizado com sucesso."});
         } catch(error){
-            console.log(error);
+            res.status(500).json({ msg: error.message });
+            console.log({error: error});        
         }
     }
 
