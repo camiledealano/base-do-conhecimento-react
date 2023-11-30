@@ -6,7 +6,7 @@ import axios from 'axios';
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
-  const URL_API = 'https://localhost:8080/api'
+  const URL_API = 'http://localhost:8080/api'
   const resultQuery = [];
 
   const handleSearchChange = (event) => {
@@ -19,15 +19,14 @@ export default function Home() {
   };
 
   useEffect(() => {
-    axios.get(URL_API + '/articles', {
-      headers: {
-        'Authorization': 'Bearer b093363be25cc41e0cc2d8cecaf7d6ee' 
-      }
-    }).then((data) => 
+    axios.get(URL_API + '/articles')
+    .then((data) => {
       console.log(data)
-      //pega os artigos (espero que retorne um array) e depois faz um for Each -> chama o component e passa as props
-    )
-  })
+    })
+    .catch((erro) => {
+      console.log("erro")
+    })
+  }, [])
 
   return (
     <>
