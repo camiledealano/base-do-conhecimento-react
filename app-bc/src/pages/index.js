@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ArticleCard from "@/components/ArticleCard";
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import axios from 'axios';
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
+  const URL_API = 'https://localhost:8080/api'
   const resultQuery = [];
 
   const handleSearchChange = (event) => {
@@ -15,6 +17,17 @@ export default function Home() {
     event.preventDefault();
     console.log("Search Query:", searchQuery);
   };
+
+  useEffect(() => {
+    axios.get(URL_API + '/articles', {
+      headers: {
+        'Authorization': 'Bearer b093363be25cc41e0cc2d8cecaf7d6ee' 
+      }
+    }).then((data) => 
+      console.log(data)
+      //pega os artigos (espero que retorne um array) e depois faz um for Each -> chama o component e passa as props
+    )
+  })
 
   return (
     <>
