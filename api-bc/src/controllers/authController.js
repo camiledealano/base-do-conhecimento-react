@@ -14,7 +14,7 @@ const authController = {
         if(!user){
             return res.status(404).json({msg:"Usuário não encontrado."})
         };
-
+        
         if(!await bcrypt.compare(pwd, user.author_pwd)){
             return res.status(404).json({msg:"Senha incorreta!"})
         };
