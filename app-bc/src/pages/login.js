@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Header from "@/components/Header";
-import {baseUrl} from '../shared'
-import axios from 'axios';
-import Home from '../pages/index'
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function Login() {
@@ -33,19 +29,24 @@ export default function Login() {
                 }
 
             );
-            
-            console.log(response?.data.user.author_name + " logado com sucesso!")
 
             localStorage.setItem('token', response?.data.token )
             localStorage.setItem('nome', response?.data.user.author_name)
-            localStorage.setItem('token', response?.data.user.author_user)
-            
-   
+            localStorage.setItem('level', response?.data.user.author_level)
 
+            window.location.href = '/';
         } catch(erro){
+            //mensagem de erro
           console.log(erro.response?.data)
         }
-};
+    };
+
+    useEffect(() => {
+        document.body.classList.add('background-gradient');
+        return () => {
+            document.body.classList.remove('background-gradient');
+        };
+    }, []);
 
     return (
         <>

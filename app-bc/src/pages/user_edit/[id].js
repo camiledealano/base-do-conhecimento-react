@@ -17,10 +17,11 @@ export default function UserEdit() {
         }
     }, [id]);
 
-    const handleStatusChange = (newStatus) => {
-        setUser((prevUser) => ({
-            ...prevUser,
-            author_status: newStatus,
+    const handleStatusChange = (e) => {
+        const { value } = e.target;
+        setUserData((prevData) => ({
+            ...prevData,
+            author_status: value,
         }));
     };
 
@@ -75,8 +76,8 @@ export default function UserEdit() {
                                     name="author_status"
                                     id="gridRadios1"
                                     value="Ativo"
-                                    checked={user.author_status === true}
-                                    onChange={() => handleStatusChange(true)}
+                                    checked={user.author_status === 'Ativo'}
+                                    onChange={handleStatusChange}
                                 />
                                 <label className="form-check-label" htmlFor="gridRadios1">
                                     Ativo
@@ -89,8 +90,8 @@ export default function UserEdit() {
                                     name="author_status"
                                     id="gridRadios2"
                                     value="Desativo"
-                                    checked={user.author_status === false}
-                                    onChange={() => handleStatusChange(false)}
+                                    checked={user.author_status === 'Desativo'}
+                                    onChange={handleStatusChange}
                                 />
                                 <label className="form-check-label" htmlFor="gridRadios2">
                                     Desativo

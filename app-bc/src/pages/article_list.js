@@ -2,20 +2,31 @@ import Header from "@/components/Header";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { BaseUrl } from "@/shared";
 
 export default function ArticleList() {
     const [articles, setArticles] = useState([]);
-    const URL_API = 'http://localhost:8080/api/articles';
-
-    useEffect(() => {
-        axios.get(`${URL_API}`).then((response) => {
-            setArticles(response.data);
-        });
-    }, []);
+    const BaseUrl = 'http://localhost:8080/api';
 
     const handleDelete = (id) => {
-        axios.delete(`${URL_API}/${id}`)
-    }
+        const token = localStorage.getItem('token');
+        const headers = {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        };
+
+        axios.delete(`${BaseUrl}/articles/${id}`, { headers })
+            .then(() => {
+                setArticles(prevArticles => prevArticles.filter(article => article._id !== id));
+            });
+    };
+
+    useEffect(() => {
+        axios.get(`${BaseUrl}/articles`).then((response) => {
+            setArticles(response.data);
+            console.log(articles)
+        });
+    }, []);
 
     return (
         <>

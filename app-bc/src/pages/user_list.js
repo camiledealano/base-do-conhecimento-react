@@ -2,19 +2,29 @@ import Header from "@/components/Header"
 import axios from "axios";
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { BaseUrl } from "@/shared";
 
 export default function UserList() {
     const [users, setUsers] = useState([]);
-    const URL_API = 'http://localhost:8080/api/users';
 
     useEffect(() => {
-        axios.get(`${URL_API}`).then((response) => {
+        axios.get(`${BaseUrl}/users`).then((response) => {
             setUsers(response.data);
+            console.log(users)
         })
     }, [])
 
     const handleDelete = (id) => {
-        axios.delete(`${URL_API}/${id}`)
+        const token = localStorage.getItem('token');
+        const headers = {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        };
+
+        axios.delete(`${BaseUrl}/users/${id}`, {headers})
+            .then(() => {
+                setUsers(prevUsers => prevUsers.filter(user => user._id !== id));
+            })
     }
 
     return (

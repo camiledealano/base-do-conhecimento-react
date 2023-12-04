@@ -3,12 +3,13 @@ import ArticleCard from "@/components/ArticleCard";
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import axios from 'axios';
+import { BaseUrl } from '@/shared';
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [articles, setArticles] = useState([]);
   const [filteredArticles, setFilteredArticles] = useState([]);
-  const URL_API = 'http://localhost:8080/api';
+  const [userInSession, setUserInSession] = useState(false);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -25,18 +26,25 @@ export default function Home() {
   };
 
   useEffect(() => {
-    axios.get(URL_API + '/articles').then((response) => {
+    axios.get(`${BaseUrl}/articles`).then((response) => {
       setArticles(response.data);
+      console.log(articles)
     });
-  }, []);
 
+    if (localStorage.getItem('token') !== null) {
+      setUserInSession(true);
+    }
+  }, []);
 
   return (
     <>
       <Header />
-      <div className="d-flex justify-content-center align-items-center mt-5">
-        <h2 className="welcome">Olá, nome do autor!</h2>
-      </div>
+      {
+        userInSession &&
+        <div className="d-flex justify-content-center align-items-center mt-5">
+          <h2 className="welcome">Olá, {localStorage.getItem('nome')}!</h2>
+        </div>
+      }
 
       <main className="container" id="artigos">
         <div className="container">
@@ -90,10 +98,12 @@ export default function Home() {
         <div className="card mb-4 row">
           <h4 className="card-header text-center mb-4" style={{ fontWeight: 'bold' }}>Os 10 mais curtidos</h4>
           <div className="row">
-            {
-              articles.map((article, index) => (
-                <ArticleCard key={index} article={article} />))
-            }
+            {articles
+              .sort((a, b) => b.likes - a.likes)
+              .slice(0, 10)
+              .map((article, index) => (
+                <ArticleCard key={index} article={article} />
+              ))}
           </div>
         </div>
 

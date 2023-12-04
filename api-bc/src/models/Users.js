@@ -8,7 +8,7 @@ const usersSchema = new Schema({
     author_user: String,
     author_pwd: String,
     author_level: String,
-    author_status: Boolean,
+    author_status: String,
     author_create_date: { type: Date, default: Date.now }
 });
   

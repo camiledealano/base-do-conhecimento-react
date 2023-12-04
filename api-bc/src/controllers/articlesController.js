@@ -8,10 +8,11 @@ const articlesController = {
                 title : req.body.title ,
                 body : req.body.body ,
                 keywords : req.body.keywords ,
-                likes : req.body.likes ,
-                published : req.body.published ,
+                likes : req.body.likes || 0 ,
+                published : req.body.published || true ,
                 author_name : req.body.author_name,
-                published_date  : req.body.published_date 
+                published_date  : req.body.published_date,
+                featured: req.body.featured
             };
             
             const response = await ArticlesModel.create(article);

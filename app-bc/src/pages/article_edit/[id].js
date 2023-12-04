@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from "axios";
+import { BaseUrl } from "@/shared";
 
 export default function ArticleEdit() {
     const URL_API = 'http://localhost:8080/api/articles';
@@ -28,14 +29,19 @@ export default function ArticleEdit() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.put(`${URL_API}/${article._id}`, article)
+        const token = localStorage.getItem('token');
+        const headers = {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        };
+
+        axios.put(`${BaseUrl}/articles/${article._id}`, article, { headers })
             .then((response) => {
-                console.log("Artigo atualizado com sucesso!");
-            })
-            .catch((error) => {
-                console.error("Erro ao atualizar o artigo:", error);
+                if (response.status === 201) {
+                    location.href = '/article_list';
+                }
             });
-    };
+    }
 
     return (
         <>

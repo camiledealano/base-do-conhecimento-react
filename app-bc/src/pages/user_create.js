@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from "@/components/Header";
 import axios from "axios";
+import { BaseUrl } from '@/shared';
 
 export default function UserCreate() {
     const [userData, setUserData] = useState({
@@ -8,7 +9,7 @@ export default function UserCreate() {
         author_email: '',
         author_pwd: '',
         author_level: 'normal',
-        author_status: true,
+        author_status: 'Ativo',
     });
 
     const handleInputChange = (e) => {
@@ -23,22 +24,26 @@ export default function UserCreate() {
         const { value } = e.target;
         setUserData((prevData) => ({
             ...prevData,
-            author_status: value === 'Ativo',
+            author_status: value,
         }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post('http://localhost:8080/api/articles', {
-            ...userData,
-        })
-        .then((response) => {
-            //preciso do header 
-            if (response.satus === 'ok') {
-                console.log('deu certo')
-            }
-        })  
+        const token = localStorage.getItem('token');
+        const headers = {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        };
+        
+        axios.post(`${BaseUrl}/users`,
+            { ...userData },
+            { headers }).then((response) => {
+                if (response.status === 201) {
+                    location.href = '/user_list';
+                }
+            })
     };
 
     return (
@@ -84,7 +89,7 @@ export default function UserCreate() {
                                     name="author_status"
                                     id="gridRadios1"
                                     value="Ativo"
-                                    checked={userData.author_status}
+                                    checked={userData.author_status === 'Ativo'}
                                     onChange={handleStatusChange}
                                 />
                                 <label className="form-check-label focus-purple" htmlFor="gridRadios1">
@@ -98,7 +103,7 @@ export default function UserCreate() {
                                     name="author_status"
                                     id="gridRadios2"
                                     value="Desativo"
-                                    checked={!userData.author_status}
+                                    checked={userData.author_status === 'Desativo'}
                                     onChange={handleStatusChange}
                                 />
                                 <label className="form-check-label" htmlFor="gridRadios2">
