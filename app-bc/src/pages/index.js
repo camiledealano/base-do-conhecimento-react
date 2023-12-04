@@ -18,10 +18,12 @@ export default function Home() {
     console.log("Search Query:", searchQuery);
   };
 
+  const [articles, setArticles] = useState([])
+
   useEffect(() => {
     axios.get(URL_API + '/articles')
-    .then((data) => {
-      console.log(data)
+    .then((response) => {
+      setArticles(response.data)
     })
     .catch((erro) => {
       console.log("erro")
@@ -32,9 +34,9 @@ export default function Home() {
     <>
     <Header />
       <div className="d-flex justify-content-center align-items-center mt-5">
-        <h2 className="welcome">Olá, nome do autor!</h2>
+        <h2 className="welcome">Olá, </h2>
       </div>
-
+    
       <main className="container" id="artigos">
         <div className="container">
           <div className="row justify-content-center mt-3">
@@ -74,7 +76,9 @@ export default function Home() {
         <div className="card mb-5 mt-5 row">
           <h4 className="card-header text-center mb-4" style={{ fontWeight: 'bold' }}>Destaques</h4>
           <div className="row">
-            <ArticleCard />
+                  return(
+                    <ArticleCard articles={articles}/>
+                  )
           </div>
         </div>
 

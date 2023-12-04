@@ -35,8 +35,8 @@ export default function UserList() {
                                 <td>author id </td>
                                 <td>author_name </td>
                                 <td>user.author_user</td>
-                                <td> user.author_email </td>
-                                <td> user.author_level </td>
+                                <td>user.author_email </td>
+                                <td>user.author_level </td>
                                 <td>user.author_status</td>
                                 <td className="btn-group">
                                     <Link href="/users/edit/iddoautor">

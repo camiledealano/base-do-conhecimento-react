@@ -1,16 +1,15 @@
 import Link from "next/link"
+import React from 'react';
 
-export default function ArticleCard() {
-    const article = {
-        titulo: "teste",
-        body: "corpo do texto",
-        autor: "camile",
-        dataPublicacao: "hoje",
-        likes: 5
-    }
+
+export default function ArticleCard({articles}) {
+
+    console.log(articles)
 
     return (
         <>
+        {
+         articles && articles.map((article, i) => (
             <div className="col col-lg-4 mb-3">
                 <div className="card text-center h-100">
                     <div className="card-body d-flex flex-column">
@@ -40,6 +39,10 @@ export default function ArticleCard() {
                     </div>
                 </div>
             </div>
-        </>
+         
+         ))
+        }
+           
+      </>
     )
 }

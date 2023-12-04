@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Header from "@/components/Header";
+import {baseUrl} from '../shared'
+import axios from 'axios';
+import Home from '../pages/index'
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-    const [user, setUser] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setUser] = useState('');
+    const [pwd, setPassword] = useState('');
 
     const handleUserChange = (event) => {
         setUser(event.target.value);
@@ -13,19 +17,34 @@ export default function Login() {
         setPassword(event.target.value);
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log("Usuário:", user);
-        console.log("Senha:", password);
-    };
 
-    useEffect(() => {
-        document.body.classList.add('background-gradient');
+        const url = 'http://localhost:8080/api/authenticate';
 
-        return () => {
-            document.body.classList.remove('background-gradient');
-        };
-    }, []);
+        try{
+            const response = await axios.post(url, 
+                JSON.stringify({email, pwd}),
+                {
+                    headers :{
+                        'Content-Type': 'application/json',
+                    }
+                }
+
+            );
+            
+            console.log(response?.data.user.author_name + " logado com sucesso!")
+
+            localStorage.setItem('token', response?.data.token )
+            localStorage.setItem('nome', response?.data.user.author_name)
+            localStorage.setItem('token', response?.data.user.author_user)
+            
+   
+
+        } catch(erro){
+          console.log(erro.response?.data)
+        }
+};
 
     return (
         <>
@@ -41,19 +60,19 @@ export default function Login() {
                     <p className="form-title">Entre na sua conta</p>
                     <div className="input-container">
                         <input
-                            name="user"
+                            name="author_email"
                             placeholder="Digite seu e-mail"
                             type="text"
-                            value={user}
+                            value={email}
                             onChange={handleUserChange}
                         />
                     </div>
                     <div className="input-container">
                         <input
-                            name="password"
+                            name="author_pwd"
                             placeholder="Digite sua senha"
                             type="password"
-                            value={password}
+                            value={pwd}
                             onChange={handlePasswordChange}
                         />
                     </div>
