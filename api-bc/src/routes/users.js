@@ -3,7 +3,7 @@ const router = require("express").Router();
 const usersController = require("../controllers/usersController");
 const authMiddlewares =  require("../middlewares/auth")
 
-router.route("/users").post(authMiddlewares, (req, res) => usersController.create(req, res));
+router.route("/users").post( (req, res) => usersController.create(req, res));
 
 router.route("/users").get((req,res) => usersController.getAll(req,res));
 

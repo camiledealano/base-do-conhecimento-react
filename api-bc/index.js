@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express()
-
+const cors = require('cors');
 
 require('dotenv').config();
 
@@ -13,6 +13,10 @@ conn();
 
 const routes = require("./src/routes/router");
 
+app.use(cors({
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type,Authorization',
+  }));
 app.use(express.json());
 app.use("/api", routes);
 

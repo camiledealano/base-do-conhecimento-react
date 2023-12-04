@@ -6,6 +6,7 @@ const usersController = {
 
     create: async(req, res) => {
         try{
+            console.log(req.body.pwd)
            const salt = await bcrypt.genSalt(12);
            const passwordHash = await bcrypt.hash(req.body.pwd, salt);
 
