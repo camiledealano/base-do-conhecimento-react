@@ -4,6 +4,7 @@ import {baseUrl} from '../shared'
 import axios from 'axios';
 import Home from '../pages/index'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Login() {
     const [email, setUser] = useState('');
@@ -48,13 +49,10 @@ export default function Login() {
 
     return (
         <>
-        <Header />
+            <Header />
             <main className="container d-flex flex-column justify-content-center align-items-center min-vh-100">
                 <form
                     className="form text-center justify-content-center"
-                    action="/login/autenticar"
-                    method="POST"
-                    encType="application/x-www-form-urlencoded"
                     onSubmit={handleSubmit}
                 >
                     <p className="form-title">Entre na sua conta</p>

@@ -6,8 +6,9 @@ import axios from 'axios';
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
-  const URL_API = 'http://localhost:8080/api'
-  const resultQuery = [];
+  const [articles, setArticles] = useState([]);
+  const [filteredArticles, setFilteredArticles] = useState([]);
+  const URL_API = 'http://localhost:8080/api';
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -15,28 +16,28 @@ export default function Home() {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    console.log("Search Query:", searchQuery);
+
+    const filtered = articles.filter((article) =>
+      article.keywords.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    setFilteredArticles(filtered);
   };
 
-  const [articles, setArticles] = useState([])
-
   useEffect(() => {
-    axios.get(URL_API + '/articles')
-    .then((response) => {
-      setArticles(response.data)
-    })
-    .catch((erro) => {
-      console.log("erro")
-    })
-  }, [])
+    axios.get(URL_API + '/articles').then((response) => {
+      setArticles(response.data);
+    });
+  }, []);
+
 
   return (
     <>
-    <Header />
+      <Header />
       <div className="d-flex justify-content-center align-items-center mt-5">
-        <h2 className="welcome">Olá, </h2>
+        <h2 className="welcome">Olá, nome do autor!</h2>
       </div>
-    
+
       <main className="container" id="artigos">
         <div className="container">
           <div className="row justify-content-center mt-3">
@@ -64,11 +65,13 @@ export default function Home() {
           </div>
         </div>
 
-        {resultQuery.length > 0 &&
+        {searchQuery && filteredArticles.length > 0 &&
           <div className="card mb-5 mt-5 row">
             <h4 className="card-header text-center mb-4" style={{ fontWeight: 'bold' }}>Artigos encontrados</h4>
             <div className="row">
-              <ArticleCard />
+              {filteredArticles.map((article, index) => (
+                <ArticleCard key={index} article={article} />
+              ))}
             </div>
           </div>
         }
@@ -76,23 +79,31 @@ export default function Home() {
         <div className="card mb-5 mt-5 row">
           <h4 className="card-header text-center mb-4" style={{ fontWeight: 'bold' }}>Destaques</h4>
           <div className="row">
-                  return(
-                    <ArticleCard articles={articles}/>
-                  )
+            {articles
+              .filter((article) => article.featured === 'on')
+              .map((featuredArticle, index) => (
+                <ArticleCard key={index} article={featuredArticle} />
+              ))}
           </div>
         </div>
 
         <div className="card mb-4 row">
           <h4 className="card-header text-center mb-4" style={{ fontWeight: 'bold' }}>Os 10 mais curtidos</h4>
           <div className="row">
-            <ArticleCard />
+            {
+              articles.map((article, index) => (
+                <ArticleCard key={index} article={article} />))
+            }
           </div>
         </div>
 
         <div className="card mb-4 row">
           <h4 className="card-header text-center mb-4" style={{ fontWeight: 'bold' }}>Todos os Artigos</h4>
           <div className="row">
-            <ArticleCard />
+            {
+              articles.map((article, index) => (
+                <ArticleCard key={index} article={article} />))
+            }
           </div>
         </div>
       </main>
