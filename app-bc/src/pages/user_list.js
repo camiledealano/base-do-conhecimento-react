@@ -5,12 +5,17 @@ import { useEffect, useState } from "react"
 
 export default function UserList() {
     const [users, setUsers] = useState([]);
+    const URL_API = 'http://localhost:8080/api/users';
 
     useEffect(() => {
-        axios.get('http://localhost:8080/api/users').then((response) => {
+        axios.get(`${URL_API}`).then((response) => {
             setUsers(response.data);
         })
     }, [])
+
+    const handleDelete = (id) => {
+        axios.delete(`${URL_API}/${id}`)
+    }
 
     return (
         <>
@@ -41,7 +46,7 @@ export default function UserList() {
                         <tbody>
                             {
                                 users.map((user) => (
-                                    <tr>
+                                    <tr key={user._id}>
                                         <td>{user._id}</td>
                                         <td>{user.author_name}</td>
                                         <td>{user.author_user}</td>
@@ -49,17 +54,15 @@ export default function UserList() {
                                         <td>{user.author_level}</td>
                                         <td>{user.author_status}</td>
                                         <td className="btn-group">
-                                            <Link href="/users/edit/iddoautor">
+                                            <Link href="/user_edit/[id]" as={`/user_edit/${user._id}`}>
                                                 <button className="btn btn-outline-primary btn-sm">
                                                     <i className="material-icons">create</i>
                                                 </button>
                                             </Link>
                                             <div style={{ margin: '3px' }}></div>
-                                            <Link href="/users/delete/iddoautor">
-                                                <button className="btn btn-outline-danger btn-sm">
-                                                    <i className="material-icons">delete</i>
-                                                </button>
-                                            </Link>
+                                            <button onClick={() => handleDelete(user._id)} className="btn btn-outline-danger btn-sm">
+                                                <i className="material-icons">delete</i>
+                                            </button>
                                         </td>
                                     </tr>
                                 ))

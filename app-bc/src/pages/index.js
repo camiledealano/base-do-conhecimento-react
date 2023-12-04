@@ -7,8 +7,8 @@ import axios from 'axios';
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [articles, setArticles] = useState([]);
-  const URL_API = 'http://localhost:8080/api'
-  const resultQuery = [];
+  const [filteredArticles, setFilteredArticles] = useState([]);
+  const URL_API = 'http://localhost:8080/api';
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -16,14 +16,20 @@ export default function Home() {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    console.log("Search Query:", searchQuery);
+
+    const filtered = articles.filter((article) =>
+      article.keywords.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    setFilteredArticles(filtered);
   };
 
   useEffect(() => {
     axios.get(URL_API + '/articles').then((response) => {
       setArticles(response.data);
-    })
+    });
   }, []);
+
 
   return (
     <>
@@ -59,14 +65,13 @@ export default function Home() {
           </div>
         </div>
 
-        {resultQuery.length > 0 &&
+        {searchQuery && filteredArticles.length > 0 &&
           <div className="card mb-5 mt-5 row">
             <h4 className="card-header text-center mb-4" style={{ fontWeight: 'bold' }}>Artigos encontrados</h4>
             <div className="row">
-              {
-                articles.map((article, index) => (
-                  <ArticleCard key={index} article={article} />))
-              }
+              {filteredArticles.map((article, index) => (
+                <ArticleCard key={index} article={article} />
+              ))}
             </div>
           </div>
         }
@@ -74,10 +79,11 @@ export default function Home() {
         <div className="card mb-5 mt-5 row">
           <h4 className="card-header text-center mb-4" style={{ fontWeight: 'bold' }}>Destaques</h4>
           <div className="row">
-            {
-              articles.map((article, index) => (
-                <ArticleCard key={index} article={article} />))
-            }
+            {articles
+              .filter((article) => article.featured === 'on')
+              .map((featuredArticle, index) => (
+                <ArticleCard key={index} article={featuredArticle} />
+              ))}
           </div>
         </div>
 

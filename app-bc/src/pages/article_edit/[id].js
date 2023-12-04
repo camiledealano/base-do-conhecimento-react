@@ -4,15 +4,14 @@ import { useRouter } from 'next/router';
 import axios from "axios";
 
 export default function ArticleEdit() {
-    const URL_API = 'http://localhost:8080/api';
+    const URL_API = 'http://localhost:8080/api/articles';
     const [article, setArticle] = useState({});
     const router = useRouter();
     const { id } = router.query;
 
     useEffect(() => {
-        // Certifique-se de buscar os detalhes do artigo apenas quando o id estiver disponível
         if (id) {
-            axios.get(`${URL_API}/articles/${id}`).then((response) => {
+            axios.get(`${URL_API}/${id}`).then((response) => {
                 setArticle(response.data);
             })
         }
@@ -29,7 +28,7 @@ export default function ArticleEdit() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.put(`${URL_API}/articles/${article._id}`, article)
+        axios.put(`${URL_API}/${article._id}`, article)
             .then((response) => {
                 console.log("Artigo atualizado com sucesso!");
             })

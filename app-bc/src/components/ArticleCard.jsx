@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Link from "next/link";
 
 export default function ArticleCard({ article }) {
@@ -26,7 +25,7 @@ export default function ArticleCard({ article }) {
                                     </div>
                                 </button>
                             </div>
-                            <Link href={`/article_edit`} className="link-secondary">
+                            <Link href={`/article_details/${article._id}`} className="link-secondary">
                                 <p style={{ color: 'var(--primary)' }}>Saiba mais..</p>
                             </Link>
                         </div>

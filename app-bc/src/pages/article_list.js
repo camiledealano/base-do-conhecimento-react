@@ -5,12 +5,17 @@ import { useEffect, useState } from "react";
 
 export default function ArticleList() {
     const [articles, setArticles] = useState([]);
+    const URL_API = 'http://localhost:8080/api/articles';
 
     useEffect(() => {
-        axios.get('http://localhost:8080/api/articles').then((response) => {
+        axios.get(`${URL_API}`).then((response) => {
             setArticles(response.data);
         });
     }, []);
+
+    const handleDelete = (id) => {
+        axios.delete(`${URL_API}/${id}`)
+    }
 
     return (
         <>
@@ -39,7 +44,7 @@ export default function ArticleList() {
                         </thead>
                         <tbody>
                             {articles.map((article) => (
-                                <tr key={article.id}>
+                                <tr key={article._id}>
                                     <td className="max-cell">{article._id}</td>
                                     <td className="max-cell">{article.title}</td>
                                     <td className="max-cell">{article.body}</td>
@@ -54,11 +59,9 @@ export default function ArticleList() {
                                             </button>
                                         </Link>
                                         <div style={{ margin: '3px' }}></div>
-                                        <Link href={`/articles/delete/${article._id}`}>
-                                            <button className="btn btn-outline-danger btn-sm">
-                                                <i className="material-icons">delete</i>
-                                            </button>
-                                        </Link>
+                                        <button onClick={() => handleDelete(article._id)} className="btn btn-outline-danger btn-sm">
+                                            <i className="material-icons">delete</i>
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
