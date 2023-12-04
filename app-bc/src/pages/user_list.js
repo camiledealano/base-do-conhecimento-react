@@ -1,16 +1,24 @@
 import Header from "@/components/Header"
-import SuccessMessage from "@/components/SuccessMessage"
+import axios from "axios";
 import Link from "next/link"
+import { useEffect, useState } from "react"
 
 export default function UserList() {
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/users').then((response) => {
+            setUsers(response.data);
+        })
+    }, [])
+
     return (
         <>
-        <Header />
+            <Header />
             <main className="mt-4">
-                {/* <SuccessMessage /> */}
 
                 <div className="mb-4" style={{ marginLeft: '6%', width: '150px' }}>
-                    <a href="/users/new" className="btn btn-success d-flex align-items-center">
+                    <a href="/user_create" className="btn btn-success d-flex align-items-center">
                         <i className="material-icons mr-2">add</i>
                         Novo usuário
                     </a>
@@ -31,27 +39,32 @@ export default function UserList() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>author id </td>
-                                <td>author_name </td>
-                                <td>user.author_user</td>
-                                <td> user.author_email </td>
-                                <td> user.author_level </td>
-                                <td>user.author_status</td>
-                                <td className="btn-group">
-                                    <Link href="/users/edit/iddoautor">
-                                        <button className="btn btn-outline-primary btn-sm">
-                                            <i className="material-icons">create</i>
-                                        </button>
-                                    </Link>
-                                    <div style={{ margin: '3px' }}></div>
-                                    <Link href="/users/delete/iddoautor">
-                                        <button className="btn btn-outline-danger btn-sm">
-                                            <i className="material-icons">delete</i>
-                                        </button>
-                                    </Link>
-                                </td>
-                            </tr>
+                            {
+                                users.map((user) => (
+                                    <tr>
+                                        <td>{user._id}</td>
+                                        <td>{user.author_name}</td>
+                                        <td>{user.author_user}</td>
+                                        <td>{user.author_email}</td>
+                                        <td>{user.author_level}</td>
+                                        <td>{user.author_status}</td>
+                                        <td className="btn-group">
+                                            <Link href="/users/edit/iddoautor">
+                                                <button className="btn btn-outline-primary btn-sm">
+                                                    <i className="material-icons">create</i>
+                                                </button>
+                                            </Link>
+                                            <div style={{ margin: '3px' }}></div>
+                                            <Link href="/users/delete/iddoautor">
+                                                <button className="btn btn-outline-danger btn-sm">
+                                                    <i className="material-icons">delete</i>
+                                                </button>
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+
                         </tbody>
                     </table>
                 </div>

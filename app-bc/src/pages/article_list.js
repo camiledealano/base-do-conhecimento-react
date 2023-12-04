@@ -1,16 +1,23 @@
-import Header from "@/components/Header"
-import SuccessMessage from "@/components/SuccessMessage"
-import Link from "next/link"
+import Header from "@/components/Header";
+import axios from "axios";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function ArticleList() {
+    const [articles, setArticles] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/articles').then((response) => {
+            setArticles(response.data);
+        });
+    }, []);
+
     return (
         <>
-        <Header />
+            <Header />
             <main className="mt-4">
-                {/* <SuccessMessage /> */}
-
                 <div className="mb-4" style={{ marginLeft: '6%', width: '140px' }}>
-                    <a href="/articles/new" className="btn btn-success d-flex align-items-center">
+                    <a href="/article_create" className="btn btn-success d-flex align-items-center">
                         <i className="material-icons mr-2">add</i>
                         Novo artigo
                     </a>
@@ -31,33 +38,34 @@ export default function ArticleList() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td className="max-cell">id</td>
-                                <td className="max-cell">title</td>
-                                <td className="max-cell">body</td>
-                                <td className="max-cell">palavras-chave</td>
-                                <td className="max-cell">nome do autor</td>
-                                <td className="text-center">data de publicação</td>
-                                <td className="text-center">likes</td>
-                                <td className="btn-group">
-                                    <Link href="/article_edit/iddoartigo">
-                                        <button className="btn btn-outline-primary btn-sm">
-                                            <i className="material-icons">create</i>
-                                        </button>
-                                    </Link>
-                                    <div style={{ margin: '3px' }}></div>
-                                    {/* esse aqui faz requisição de delete passando o id do artigo como parametro */}
-                                    <Link href="/articles/delete/iddoartigo"> 
-                                        <button className="btn btn-outline-danger btn-sm">
-                                            <i className="material-icons">delete</i>
-                                        </button>
-                                    </Link>
-                                </td>
-                            </tr>
+                            {articles.map((article) => (
+                                <tr key={article.id}>
+                                    <td className="max-cell">{article._id}</td>
+                                    <td className="max-cell">{article.title}</td>
+                                    <td className="max-cell">{article.body}</td>
+                                    <td className="max-cell">{article.keywords}</td>
+                                    <td className="max-cell">{article.author_name}</td>
+                                    <td className="text-center">{article.published_date}</td>
+                                    <td className="text-center">{article.likes}</td>
+                                    <td className="btn-group">
+                                        <Link href={`/article_edit/[id]`} as={`/article_edit/${article._id}`}>
+                                            <button className="btn btn-outline-primary btn-sm">
+                                                <i className="material-icons">create</i>
+                                            </button>
+                                        </Link>
+                                        <div style={{ margin: '3px' }}></div>
+                                        <Link href={`/articles/delete/${article._id}`}>
+                                            <button className="btn btn-outline-danger btn-sm">
+                                                <i className="material-icons">delete</i>
+                                            </button>
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
             </main>
         </>
-    )
+    );
 }

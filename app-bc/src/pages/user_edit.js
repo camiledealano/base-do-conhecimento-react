@@ -4,7 +4,7 @@ export default function UserEdit() {
         <Header />
             <main className="container container-form mt-5 mb-5">
                 <h2 className="text-center mb-1">Editar Usuário</h2>
-                <form action="/users/edit" method="POST" enctype="application/x-www-form-urlencoded">
+                <form action="/users/edit" method="POST" encType="application/x-www-form-urlencoded">
                     <div className="col-md-12 mb-3">
                         <input type="hidden" name="author_id" value="<%= user.author_id %>" display></input>
                             <label for="inputnome4">Nome</label>

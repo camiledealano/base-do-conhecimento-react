@@ -6,6 +6,7 @@ import axios from 'axios';
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [articles, setArticles] = useState([]);
   const URL_API = 'http://localhost:8080/api'
   const resultQuery = [];
 
@@ -19,18 +20,14 @@ export default function Home() {
   };
 
   useEffect(() => {
-    axios.get(URL_API + '/articles')
-    .then((data) => {
-      console.log(data)
+    axios.get(URL_API + '/articles').then((response) => {
+      setArticles(response.data);
     })
-    .catch((erro) => {
-      console.log("erro")
-    })
-  }, [])
+  }, []);
 
   return (
     <>
-    <Header />
+      <Header />
       <div className="d-flex justify-content-center align-items-center mt-5">
         <h2 className="welcome">Olá, nome do autor!</h2>
       </div>
@@ -66,7 +63,10 @@ export default function Home() {
           <div className="card mb-5 mt-5 row">
             <h4 className="card-header text-center mb-4" style={{ fontWeight: 'bold' }}>Artigos encontrados</h4>
             <div className="row">
-              <ArticleCard />
+              {
+                articles.map((article, index) => (
+                  <ArticleCard key={index} article={article} />))
+              }
             </div>
           </div>
         }
@@ -74,21 +74,30 @@ export default function Home() {
         <div className="card mb-5 mt-5 row">
           <h4 className="card-header text-center mb-4" style={{ fontWeight: 'bold' }}>Destaques</h4>
           <div className="row">
-            <ArticleCard />
+            {
+              articles.map((article, index) => (
+                <ArticleCard key={index} article={article} />))
+            }
           </div>
         </div>
 
         <div className="card mb-4 row">
           <h4 className="card-header text-center mb-4" style={{ fontWeight: 'bold' }}>Os 10 mais curtidos</h4>
           <div className="row">
-            <ArticleCard />
+            {
+              articles.map((article, index) => (
+                <ArticleCard key={index} article={article} />))
+            }
           </div>
         </div>
 
         <div className="card mb-4 row">
           <h4 className="card-header text-center mb-4" style={{ fontWeight: 'bold' }}>Todos os Artigos</h4>
           <div className="row">
-            <ArticleCard />
+            {
+              articles.map((article, index) => (
+                <ArticleCard key={index} article={article} />))
+            }
           </div>
         </div>
       </main>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from "@/components/Header";
+import axios from 'axios';
 
 export default function Login() {
     const [user, setUser] = useState('');
@@ -15,8 +16,15 @@ export default function Login() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log("Usuário:", user);
-        console.log("Senha:", password);
+
+        axios.post('http://localhost:8080/api/users', {
+            username: user,
+            password: password
+        }).then((response) => {
+            if (response.status = 200) {
+                window.location.href = '/';
+            }
+        })
     };
 
     useEffect(() => {
@@ -29,13 +37,10 @@ export default function Login() {
 
     return (
         <>
-        <Header />
+            <Header />
             <main className="container d-flex flex-column justify-content-center align-items-center min-vh-100">
                 <form
                     className="form text-center justify-content-center"
-                    action="/login/autenticar"
-                    method="POST"
-                    encType="application/x-www-form-urlencoded"
                     onSubmit={handleSubmit}
                 >
                     <p className="form-title">Entre na sua conta</p>

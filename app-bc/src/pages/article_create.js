@@ -7,7 +7,7 @@ export default function ArticleCreate() {
             <Header />
             <main className="container container-form mt-5 mb-5">
                 <h2 className="text-center mb-2">Cadastro de Artigo</h2>
-                <form className="row g-3" action="/articles/create" method="POST" enctype="application/x-www-form-urlencoded">
+                <form className="row g-3" action="/articles" method="POST" encType="application/x-www-form-urlencoded">
                     <div className="col-md-12">
                         <label for="title" className="form-label">Título</label>
                         <input type="text" className="form-control focus-purple" name="title"></input>

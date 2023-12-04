@@ -1,10 +1,12 @@
+import Header from "@/components/Header"
+
 export default function UserCreate() {
     return (
         <>
         <Header />
             <main className="container container-form mt-5 mb-5">
                 <h2 className="text-center mb-3">Cadastro de Usuário</h2>
-                <form action="/users/create" method="POST" enctype="application/x-www-form-urlencoded">
+                <form action="/users/create" method="POST" encType="application/x-www-form-urlencoded">
                     <div className="col-md-12 mb-3">
                         <label for="name">Nome</label>
                         <input type="text" className="form-control focus-purple" id="name" name="author_name"></input>
