@@ -2,24 +2,59 @@ import Header from "@/components/Header"
 import axios from "axios";
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { BaseUrl } from "@/shared";
+import { useRouter } from "next/router";
+import SuccessMessage from "@/components/SuccessMessage";
 
 export default function UserList() {
     const [users, setUsers] = useState([]);
-    const URL_API = 'http://localhost:8080/api/users';
+    const router = useRouter();
+    const { success, edit } = router.query;
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
-        axios.get(`${URL_API}`).then((response) => {
+        axios.get(`${BaseUrl}/users`).then((response) => {
             setUsers(response.data);
-        })
-    }, [])
+        });
+
+        if (success || edit) {
+            setShowSuccessMessage(true);
+        };
+    }, [success, edit]);
+
+    const verifyAction = () => {
+        if (success) {
+            return 'criado';
+        } else if (edit) {
+            return 'editado';
+        }
+    }
 
     const handleDelete = (id) => {
-        axios.delete(`${URL_API}/${id}`)
+        const token = localStorage.getItem('token');
+        const headers = {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        };
+
+        axios.delete(`${BaseUrl}/users/${id}`, { headers })
+            .then(() => {
+                setUsers(prevUsers => prevUsers.filter(user => user._id !== id));
+            })
     }
 
     return (
         <>
             <Header />
+            {
+                showSuccessMessage &&
+                <SuccessMessage
+                    tipoMensagem={'success'}
+                    cadastro={'Usuário'}
+                    acao={verifyAction()}
+                    message={'com sucesso!'}
+                />
+            }
             <main className="mt-4">
 
                 <div className="mb-4" style={{ marginLeft: '6%', width: '150px' }}>

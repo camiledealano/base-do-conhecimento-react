@@ -2,6 +2,7 @@ import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import { useState } from "react";
 import axios from "axios";
+import { BaseUrl } from "@/shared";
 
 export default function ArticleCreate() {
     const [featured, setFeatured] = useState('on');
@@ -27,14 +28,18 @@ export default function ArticleCreate() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post('http://localhost:8080/api/articles', {
+        const token = localStorage.getItem('token');
+        const headers = {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        };
+
+        axios.post(`${BaseUrl}/articles`, {
             ...formData,
             featured,
-        })
-        .then((response) => {
-            //preciso do header 
-            if (response.satus === 'ok') {
-                console.log('deu certo')
+        }, {headers}).then((response) => {
+            if (response.status === 201) {
+                location.href = '/article_list?success=true';
             }
         })  
     };
@@ -47,25 +52,25 @@ export default function ArticleCreate() {
                 <form className="row g-3" onSubmit={handleSubmit} encType="application/x-www-form-urlencoded">
                     <div className="col-md-12">
                         <label htmlFor="title" className="form-label">Título</label>
-                        <input type="text" className="form-control focus-purple" name="title"></input>
+                        <input onChange={handleInputChange} type="text" className="form-control focus-purple" name="title"></input>
                     </div>
                     <div className="col-md-12">
                         <label htmlFor="body" className="form-label">Corpo do texto</label>
-                        <textarea className="form-control focus-purple" name="body" style={{ height: '200px' }}></textarea>
+                        <textarea onChange={handleInputChange} className="form-control focus-purple" name="body" style={{ height: '200px' }}></textarea>
                     </div>
                     <div className="col-12">
                         <label htmlFor="keywords" className="form-label">Palavras-chave</label>
-                        <input type="text" className="form-control focus-purple" name="keywords"></input>
+                        <input onChange={handleInputChange} type="text" className="form-control focus-purple" name="keywords"></input>
                     </div>
                     <div className="col-md-12">
                         <div className="row">
                             <div className="col-md-6">
                                 <label htmlFor="author_name" className="form-label">Nome do autor</label>
-                                <input type="text" className="form-control focus-purple" name="author_name"></input>
+                                <input onChange={handleInputChange} type="text" className="form-control focus-purple" name="author_name"></input>
                             </div>
                             <div className="col-md-6">
                                 <label htmlFor="published_date" className="form-label">Data de publicação</label>
-                                <input type="text" className="form-control focus-purple" name="published_date"></input>
+                                <input onChange={handleInputChange} type="text" className="form-control focus-purple" name="published_date"></input>
                             </div>
                         </div>
                     </div>
@@ -99,13 +104,12 @@ export default function ArticleCreate() {
                                 Não
                             </label>
                         </div>
-                    </div>
+                    </div>  
                     <div className="text-center btn-cadastrar-artigo">
                         <button type="submit" className="btn btn-success" style={{ width: '150px' }}>Cadastrar</button>
                     </div>
                 </form>
             </main>
-
             <Footer />
         </>
     )

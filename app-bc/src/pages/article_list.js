@@ -2,24 +2,60 @@ import Header from "@/components/Header";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { BaseUrl } from "@/shared";
+import SuccessMessage from "@/components/SuccessMessage";
+import { useRouter } from "next/router";
 
 export default function ArticleList() {
     const [articles, setArticles] = useState([]);
-    const URL_API = 'http://localhost:8080/api/articles';
-
-    useEffect(() => {
-        axios.get(`${URL_API}`).then((response) => {
-            setArticles(response.data);
-        });
-    }, []);
+    const router = useRouter();
+    const { success, edit } = router.query;
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     const handleDelete = (id) => {
-        axios.delete(`${URL_API}/${id}`)
+        const token = localStorage.getItem('token');
+        const headers = {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        };
+
+        axios.delete(`${BaseUrl}/articles/${id}`, { headers })
+            .then(() => {
+                setArticles(prevArticles => prevArticles.filter(article => article._id !== id));
+            });
+    };
+
+    const verifyAction = () => {
+        if (success) {
+            return 'criado';
+        } else if (edit) {
+            return 'editado';
+        }
     }
+
+    useEffect(() => {
+        axios.get(`${BaseUrl}/articles`).then((response) => {
+            setArticles(response.data);
+        });
+
+        if (success || edit) {
+            setShowSuccessMessage(true);
+        };
+
+    }, [success, edit]);
 
     return (
         <>
             <Header />
+            {
+                showSuccessMessage &&
+                <SuccessMessage
+                    tipoMensagem={'success'}
+                    cadastro={'Artigo'}
+                    acao={verifyAction()}
+                    message={'com sucesso!'}
+                />
+            }
             <main className="mt-4">
                 <div className="mb-4" style={{ marginLeft: '6%', width: '140px' }}>
                     <a href="/article_create" className="btn btn-success d-flex align-items-center">

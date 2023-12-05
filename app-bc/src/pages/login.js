@@ -5,6 +5,7 @@ import axios from 'axios';
 import Home from '../pages/index'
 import { useNavigate } from 'react-router-dom';
 
+
 export default function Login() {
     const [email, setUser] = useState('');
     const [pwd, setPassword] = useState('');
@@ -32,18 +33,26 @@ export default function Login() {
                 }
 
             );
-            
-            console.log(response?.data.user.author_name + " logado com sucesso!")
 
             localStorage.setItem('token', response?.data.token )
             localStorage.setItem('nome', response?.data.user.author_name)         
+            localStorage.setItem('level', response?.data.user.author_level)
 
+            window.location.href = '/';
         } catch(erro){
+            //mensagem de erro
           console.log(erro.response?.data)
         }
 
         return(<Home />)
 };
+
+    useEffect(() => {
+        document.body.classList.add('background-gradient');
+        return () => {
+            document.body.classList.remove('background-gradient');
+        };
+    }, []);
 
     return (
         <>

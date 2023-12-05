@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from "@/components/Header";
 import axios from "axios";
+import { BaseUrl } from '@/shared';
 
 export default function UserCreate() {
     const [userData, setUserData] = useState({
@@ -8,7 +9,7 @@ export default function UserCreate() {
         author_email: '',
         author_pwd: '',
         author_level: 'normal',
-        author_status: true,
+        author_status: 'Ativo',
     });
 
     const handleInputChange = (e) => {
@@ -23,22 +24,26 @@ export default function UserCreate() {
         const { value } = e.target;
         setUserData((prevData) => ({
             ...prevData,
-            author_status: value === 'Ativo',
+            author_status: value,
         }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post('http://localhost:8080/api/articles', {
-            ...userData,
-        })
-        .then((response) => {
-            //preciso do header 
-            if (response.satus === 'ok') {
-                console.log('deu certo')
-            }
-        })  
+        const token = localStorage.getItem('token');
+        const headers = {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        };
+
+        axios.post(`${BaseUrl}/users`,
+            { ...userData },
+            { headers }).then((response) => {
+                if (response.status === 201) {
+                    location.href = '/user_list?success=true';
+                }
+            })
     };
 
     return (
@@ -49,16 +54,16 @@ export default function UserCreate() {
                 <form onSubmit={handleSubmit} encType="application/x-www-form-urlencoded">
                     <div className="col-md-12 mb-3">
                         <label htmlFor="name">Nome</label>
-                        <input type="text" className="form-control focus-purple" id="name" name="author_name" onChange={handleInputChange} value={userData.author_name}></input>
+                        <input type="text" required className="form-control focus-purple" id="name" name="author_name" onChange={handleInputChange} value={userData.author_name}></input>
                     </div>
                     <div className="col-md-12 row mb-3">
                         <div className="col-md-6">
                             <label htmlFor="email">E-mail</label>
-                            <input type="email" className="form-control focus-purple" id="email" name="author_email" onChange={handleInputChange} value={userData.author_email}></input>
+                            <input type="email" required className="form-control focus-purple" id="email" name="author_email" onChange={handleInputChange} value={userData.author_email}></input>
                         </div>
                         <div className="col-md-6">
                             <label htmlFor="senha">Senha</label>
-                            <input type="password" className="form-control focus-purple" id="senha" name="author_pwd" onChange={handleInputChange} value={userData.author_pwd} style={{ width: '105%' }}></input>
+                            <input type="password" required className="form-control focus-purple" id="senha" name="author_pwd" onChange={handleInputChange} value={userData.author_pwd} style={{ width: '105%' }}></input>
                         </div>
                     </div>
                     <div className="col-md-12 mb-3 row">
@@ -84,7 +89,7 @@ export default function UserCreate() {
                                     name="author_status"
                                     id="gridRadios1"
                                     value="Ativo"
-                                    checked={userData.author_status}
+                                    checked={userData.author_status === 'Ativo'}
                                     onChange={handleStatusChange}
                                 />
                                 <label className="form-check-label focus-purple" htmlFor="gridRadios1">
@@ -98,7 +103,7 @@ export default function UserCreate() {
                                     name="author_status"
                                     id="gridRadios2"
                                     value="Desativo"
-                                    checked={!userData.author_status}
+                                    checked={userData.author_status === 'Desativo'}
                                     onChange={handleStatusChange}
                                 />
                                 <label className="form-check-label" htmlFor="gridRadios2">
