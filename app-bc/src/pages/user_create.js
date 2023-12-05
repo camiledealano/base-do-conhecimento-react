@@ -36,7 +36,7 @@ export default function UserCreate() {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
         };
-        
+
         axios.post(`${BaseUrl}/users`,
             { ...userData },
             { headers }).then((response) => {
@@ -54,16 +54,16 @@ export default function UserCreate() {
                 <form onSubmit={handleSubmit} encType="application/x-www-form-urlencoded">
                     <div className="col-md-12 mb-3">
                         <label htmlFor="name">Nome</label>
-                        <input type="text" className="form-control focus-purple" id="name" name="author_name" onChange={handleInputChange} value={userData.author_name}></input>
+                        <input type="text" required className="form-control focus-purple" id="name" name="author_name" onChange={handleInputChange} value={userData.author_name}></input>
                     </div>
                     <div className="col-md-12 row mb-3">
                         <div className="col-md-6">
                             <label htmlFor="email">E-mail</label>
-                            <input type="email" className="form-control focus-purple" id="email" name="author_email" onChange={handleInputChange} value={userData.author_email}></input>
+                            <input type="email" required className="form-control focus-purple" id="email" name="author_email" onChange={handleInputChange} value={userData.author_email}></input>
                         </div>
                         <div className="col-md-6">
                             <label htmlFor="senha">Senha</label>
-                            <input type="password" className="form-control focus-purple" id="senha" name="author_pwd" onChange={handleInputChange} value={userData.author_pwd} style={{ width: '105%' }}></input>
+                            <input type="password" required className="form-control focus-purple" id="senha" name="author_pwd" onChange={handleInputChange} value={userData.author_pwd} style={{ width: '105%' }}></input>
                         </div>
                     </div>
                     <div className="col-md-12 mb-3 row">
