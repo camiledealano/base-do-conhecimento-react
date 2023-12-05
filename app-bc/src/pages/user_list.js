@@ -3,16 +3,32 @@ import axios from "axios";
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { BaseUrl } from "@/shared";
+import { useRouter } from "next/router";
+import SuccessMessage from "@/components/SuccessMessage";
 
 export default function UserList() {
     const [users, setUsers] = useState([]);
+    const router = useRouter();
+    const { success, edit } = router.query;
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
         axios.get(`${BaseUrl}/users`).then((response) => {
             setUsers(response.data);
-            console.log(users)
-        })
-    }, [])
+        });
+
+        if (success || edit) {
+            setShowSuccessMessage(true);
+        };
+    }, [success, edit]);
+
+    const verifyAction = () => {
+        if (success) {
+            return 'criado';
+        } else if (edit) {
+            return 'editado';
+        }
+    }
 
     const handleDelete = (id) => {
         const token = localStorage.getItem('token');
@@ -21,7 +37,7 @@ export default function UserList() {
             'Content-Type': 'application/json'
         };
 
-        axios.delete(`${BaseUrl}/users/${id}`, {headers})
+        axios.delete(`${BaseUrl}/users/${id}`, { headers })
             .then(() => {
                 setUsers(prevUsers => prevUsers.filter(user => user._id !== id));
             })
@@ -30,6 +46,15 @@ export default function UserList() {
     return (
         <>
             <Header />
+            {
+                showSuccessMessage &&
+                <SuccessMessage
+                    tipoMensagem={'success'}
+                    cadastro={'Usuário'}
+                    acao={verifyAction()}
+                    message={'com sucesso!'}
+                />
+            }
             <main className="mt-4">
 
                 <div className="mb-4" style={{ marginLeft: '6%', width: '150px' }}>

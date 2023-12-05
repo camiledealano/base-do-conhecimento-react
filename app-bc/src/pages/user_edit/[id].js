@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { BaseUrl } from "@/shared";
 
 export default function UserEdit() {
     const URL_API = 'http://localhost:8080/api/users';
@@ -19,21 +20,42 @@ export default function UserEdit() {
 
     const handleStatusChange = (e) => {
         const { value } = e.target;
-        setUserData((prevData) => ({
-            ...prevData,
+        setUser((prevUser) => ({
+            ...prevUser,
             author_status: value,
+        }));
+    };
+    
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUser((prevUser) => ({
+            ...prevUser,
+            [name]: value,
+        }));
+    };
+
+    const handleSelectChange = (e) => {
+        const { name, value } = e.target;
+        setUser((prevUser) => ({
+            ...prevUser,
+            [name]: value,
         }));
     };
 
     const handleEditSubmit = (event) => {
         event.preventDefault();
-
-        axios.put(`${URL_API}/${user._id}`, user)
+    
+        const token = localStorage.getItem('token');
+        const headers = {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        };
+    
+        axios.put(`${BaseUrl}/users/${user._id}`, user, { headers })
             .then((response) => {
-                console.log("Usuário atualizado com sucesso!");
-            })
-            .catch((error) => {
-                console.error("Erro ao atualizar o usuário:", error);
+                if (response.status === 201) {
+                    location.href = '/user_list?edit=true';
+                }
             });
     };
 
@@ -44,24 +66,24 @@ export default function UserEdit() {
                 <h2 className="text-center mb-1">Editar Usuário</h2>
                 <form onSubmit={handleEditSubmit} encType="application/x-www-form-urlencoded">
                     <div className="col-md-12 mb-3">
-                        <input type="hidden" name="author_id" value={user.author_id} />
+                        <input onChange={handleInputChange} type="hidden" name="author_id" value={user.author_id} />
                         <label htmlFor="inputnome4">Nome</label>
-                        <input type="text" className="form-control focus-purple" id="inputnome4" name="author_name" value={user.author_name} />
+                        <input onChange={handleInputChange} type="text" className="form-control focus-purple" id="inputnome4" name="author_name" value={user.author_name} />
                     </div>
                     <div className="col-md-12 row mb-3">
                         <div className="col-md-6">
                             <label htmlFor="inputEmail4">E-mail</label>
-                            <input type="email" className="form-control focus-purple" id="inputEmail4" name="author_email" value={user.author_email} />
+                            <input onChange={handleInputChange} type="email" className="form-control focus-purple" id="inputEmail4" name="author_email" value={user.author_email} />
                         </div>
                         <div className="col-md-6">
                             <label htmlFor="inputPassword4">Senha</label>
-                            <input type="password" className="form-control focus-purple" id="inputPassword4" name="author_pwd" value={user.author_pwd} style={{ width: '105%' }} />
+                            <input onChange={handleInputChange} type="password" className="form-control focus-purple" id="inputPassword4" name="author_pwd" value={user.author_pwd} style={{ width: '105%' }} />
                         </div>
                     </div>
                     <div className="col-md-12 mb-3 row">
                         <div className="col-md-6">
                             <label htmlFor="inputEstado">Nível de Acesso</label>
-                            <select id="inputEstado" className="form-control focus-purple" name="author_level" value={user.author_level}>
+                            <select id="inputEstado" className="form-control focus-purple" name="author_level" value={user.author_level} onChange={handleSelectChange}>
                                 <option value="" disabled>Escolher...</option>
                                 <option value="administrador">Administrador</option>
                                 <option value="normal">Usuário Comum</option>

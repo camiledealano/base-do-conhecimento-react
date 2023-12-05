@@ -41,7 +41,7 @@ export default function UserCreate() {
             { ...userData },
             { headers }).then((response) => {
                 if (response.status === 201) {
-                    location.href = '/user_list';
+                    location.href = '/user_list?success=true';
                 }
             })
     };

@@ -39,7 +39,7 @@ export default function ArticleCreate() {
             featured,
         }, {headers}).then((response) => {
             if (response.status === 201) {
-                location.href = '/article_list';
+                location.href = '/article_list?success=true';
             }
         })  
     };
