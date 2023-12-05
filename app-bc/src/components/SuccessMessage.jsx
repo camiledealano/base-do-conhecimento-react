@@ -14,7 +14,7 @@ export default function SuccessMessage(props) {
         }
 
         setIsVisible(true)
-        console.log("oiiiiiiiii");
+        
         const time = setTimeout(() => {
             setIsVisible(false)
         }, 3000)
