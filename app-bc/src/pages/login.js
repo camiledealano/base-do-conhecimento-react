@@ -37,14 +37,12 @@ export default function Login() {
             localStorage.setItem('token', response?.data.token )
             localStorage.setItem('nome', response?.data.user.author_name)         
             localStorage.setItem('level', response?.data.user.author_level)
-
+                
             window.location.href = '/';
         } catch(erro){
             //mensagem de erro
           console.log(erro.response?.data)
         }
-
-        return(<Home />)
 };
 
     useEffect(() => {

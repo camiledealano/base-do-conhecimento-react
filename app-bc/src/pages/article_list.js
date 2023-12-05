@@ -23,7 +23,9 @@ export default function ArticleList() {
             .then(() => {
                 setArticles(prevArticles => prevArticles.filter(article => article._id !== id));
             });
-    };
+
+            setShowSuccessMessage(true);
+        };
 
     const verifyAction = () => {
         if (success) {
@@ -41,7 +43,7 @@ export default function ArticleList() {
         if (success || edit) {
             setShowSuccessMessage(true);
         };
-
+        
     }, [success, edit]);
 
     return (

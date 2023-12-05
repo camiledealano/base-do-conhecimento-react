@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function SuccessMessage(props) {
     const [isVisible, setIsVisible] = useState(true);
@@ -6,6 +6,21 @@ export default function SuccessMessage(props) {
     const handleClose = () => {
         setIsVisible(false);
     };
+
+    useEffect(() => {
+        if(!props.message){
+            setIsVisible(false)
+            return;
+        }
+
+        setIsVisible(true)
+        console.log("oiiiiiiiii");
+        const time = setTimeout(() => {
+            setIsVisible(false)
+        }, 3000)
+
+        return () => clearTimeout(time);
+    }, [props.message])
 
     return (
         <>
