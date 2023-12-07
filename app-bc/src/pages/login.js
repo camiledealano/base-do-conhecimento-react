@@ -40,7 +40,7 @@ export default function Login() {
 
             window.location.href = '/';
         } catch (erro) {
-            if (erro.status == 404) {
+            if (erro.response.status == 404) {
                 setUserIncorret(true);
 
             } else if (erro.response.status == 400) {
@@ -54,7 +54,7 @@ export default function Login() {
         return () => {
             document.body.classList.remove('background-gradient');
         };
-    }, [userIncorret]);
+    }, [userIncorret, userDesativo]);
 
     return (
         <>
