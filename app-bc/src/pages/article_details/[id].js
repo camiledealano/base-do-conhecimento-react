@@ -12,6 +12,13 @@ export default function ArticleDetail() {
     const { id } = router.query;
 
     useEffect(() => {
+        let usuarioAdmin = localStorage.getItem('level') === 'administrador';
+        let usuarioLogado = localStorage.getItem('token') !== null
+
+        if(!usuarioAdmin || !usuarioLogado){
+            window.location.href = '/';
+        }
+        
         if (id) {
             axios.get(`${URL_API}/${id}`).then((response) => {
                 setArticle(response.data);

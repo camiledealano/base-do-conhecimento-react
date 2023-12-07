@@ -26,6 +26,13 @@ export default function ArticleCreate() {
     };
 
     const handleSubmit = (e) => {
+        let usuarioAdmin = localStorage.getItem('level') === 'administrador';
+        let usuarioLogado = localStorage.getItem('token') !== null
+
+        if(!usuarioAdmin || !usuarioLogado){
+            window.location.href = '/';
+        }
+        
         e.preventDefault();
 
         const token = localStorage.getItem('token');

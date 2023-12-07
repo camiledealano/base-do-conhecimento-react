@@ -12,6 +12,28 @@ export default function ArticleList() {
     const { success, edit } = router.query;
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
+    
+
+    useEffect(() => {
+        let usuarioAdmin = localStorage.getItem('level') === 'administrador';
+        let usuarioLogado = localStorage.getItem('token') !== null
+
+
+        if(!usuarioAdmin || !usuarioLogado){
+            window.location.href = '/';
+        }
+
+        axios.get(`${BaseUrl}/articles`).then((response) => {
+            setArticles(response.data);
+        });
+
+        if (success || edit) {
+            setShowSuccessMessage(true);
+        };
+        
+    }, [success, edit]);
+
+
     const handleDelete = (id) => {
         const token = localStorage.getItem('token');
         const headers = {
@@ -35,16 +57,7 @@ export default function ArticleList() {
         }
     }
 
-    useEffect(() => {
-        axios.get(`${BaseUrl}/articles`).then((response) => {
-            setArticles(response.data);
-        });
-
-        if (success || edit) {
-            setShowSuccessMessage(true);
-        };
-        
-    }, [success, edit]);
+    
 
     return (
         <>

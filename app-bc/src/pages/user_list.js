@@ -13,6 +13,13 @@ export default function UserList() {
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
+        let usuarioAdmin = localStorage.getItem('level') === 'administrador';
+        let usuarioLogado = localStorage.getItem('token') !== null
+
+        if(!usuarioAdmin || !usuarioLogado){
+            window.location.href = '/';
+        }
+
         axios.get(`${BaseUrl}/users`).then((response) => {
             setUsers(response.data);
         });
