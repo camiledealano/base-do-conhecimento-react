@@ -270,7 +270,7 @@ font-size: 14px;
 }
 
 .max-cell {
-  max-width: 250px;
+  max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

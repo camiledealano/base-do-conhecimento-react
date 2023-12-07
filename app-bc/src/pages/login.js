@@ -1,30 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import Header from "@/components/Header";
-import {baseUrl} from '../shared'
+import {BaseUrl, baseUrl} from '../shared'
 import axios from 'axios';
-import Home from '../pages/index'
-import { useNavigate } from 'react-router-dom';
-
+import SuccessMessage from '@/components/SuccessMessage';
 
 export default function Login() {
     const [email, setUser] = useState('');
     const [pwd, setPassword] = useState('');
+    const [userIncorret, setUserIncorret] = useState(false);
 
     const handleUserChange = (event) => {
         setUser(event.target.value);
+        setUserIncorret(false);
     };
 
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
+        setUserIncorret(false);
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const url = 'http://localhost:8080/api/authenticate';
-
         try{
-            const response = await axios.post(url, 
+            const response = await axios.post(`${BaseUrl}/authenticate`, 
                 JSON.stringify({email, pwd}),
                 {
                     headers :{
@@ -37,11 +36,12 @@ export default function Login() {
             localStorage.setItem('token', response?.data.token )
             localStorage.setItem('nome', response?.data.user.author_name)         
             localStorage.setItem('level', response?.data.user.author_level)
-                
+                            
             window.location.href = '/';
         } catch(erro){
-            //mensagem de erro
-          console.log(erro.response?.data)
+            if (erro.status = 404) {
+                setUserIncorret(true);
+            }
         }
 };
 
@@ -50,12 +50,18 @@ export default function Login() {
         return () => {
             document.body.classList.remove('background-gradient');
         };
-    }, []);
+    }, [userIncorret]);
 
     return (
         <>
             <Header />
-            <main className="container d-flex flex-column justify-content-center align-items-center min-vh-100">
+            {
+                userIncorret &&
+                <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', marginTop: '5%' }}>
+                    <SuccessMessage tipoMensagem="danger" message="Usuário ou senha incorreta!" />
+                </div>
+            }
+            <main className="d-flex flex-column justify-content-center align-items-center min-vh-100">
                 <form
                     className="form text-center justify-content-center"
                     onSubmit={handleSubmit}
