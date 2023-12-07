@@ -46,8 +46,8 @@ export default function ArticleList() {
                 setArticles(prevArticles => prevArticles.filter(article => article._id !== id));
             });
 
-            setShowSuccessMessage(true);
-        };
+        setShowSuccessMessage(true);
+    };
 
     const verifyAction = () => {
         if (success) {
@@ -56,8 +56,6 @@ export default function ArticleList() {
             return 'editado';
         }
     }
-
-    
 
     return (
         <>
@@ -79,7 +77,7 @@ export default function ArticleList() {
                     </a>
                 </div>
 
-                <div className="list-data">
+                <div style={{padding: '25px'}}>
                     <table className="table">
                         <thead>
                             <tr className="table-light">
@@ -101,7 +99,7 @@ export default function ArticleList() {
                                     <td className="max-cell">{article.body}</td>
                                     <td className="max-cell">{article.keywords}</td>
                                     <td className="max-cell">{article.author_name}</td>
-                                    <td className="text-center">{article.published_date}</td>
+                                    <td className="max-cell text-center">{article.published_date}</td>
                                     <td className="text-center">{article.likes}</td>
                                     <td className="btn-group">
                                         <Link href={`/article_edit/[id]`} as={`/article_edit/${article._id}`}>

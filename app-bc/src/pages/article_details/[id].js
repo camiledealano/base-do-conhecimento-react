@@ -1,12 +1,11 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState, useEffect } from 'react';
 import axios from "axios";
+import { BaseUrl } from "@/shared";
 
 export default function ArticleDetail() {
-    const URL_API = 'http://localhost:8080/api/articles';
     const [article, setArticle] = useState({});
     const router = useRouter();
     const { id } = router.query;
@@ -20,14 +19,14 @@ export default function ArticleDetail() {
         }
         
         if (id) {
-            axios.get(`${URL_API}/${id}`).then((response) => {
+            axios.get(`${BaseUrl}/articles/${id}`).then((response) => {
                 setArticle(response.data);
             })
         }
     });
 
     const handleLike = () => {
-        axios.put(`${URL_API}/like/${id}`);
+        axios.put(`${BaseUrl}/articles/like/${id}`);
     }
 
     return (
