@@ -10,10 +10,6 @@ const authController = {
         const { email, pwd} = req.body;
 
         const user = await UsersModel.findOne({author_email: email}).select('+pwd');
-        
-        if(user.author_status === 'Desativo'){
-            return res.status(404).json({msg:"Usuário está desativado."})
-        }
 
         if(!user){
             return res.status(404).json({msg:"Usuário não encontrado."})
@@ -28,6 +24,10 @@ const authController = {
         const token = jwt.sign({ id : user._id}, authConfig.secret, {
             expiresIn: 86400
         });
+
+        if(user.author_status == 'Desativo'){
+            return res.status(400).json({msg:"Usuário está desativado."})
+        }
 
         return res.send({user, token});
     }
